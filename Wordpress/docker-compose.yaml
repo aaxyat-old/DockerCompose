@@ -1,0 +1,36 @@
+version: '2.1'
+services:
+  wordpress:
+    image: wordpress
+    restart: always
+    ports:
+      - 9011:80
+    environment:
+      PUID: 1000
+      PGID: 100
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: kP4Th5pZqRKmGH
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - /docker/wp_main:/var/www/html
+    links:
+      - db:db
+  db:
+    image: ghcr.io/linuxserver/mariadb
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MYSQL_ROOT_PASSWORD=kP4Th5pZqRKmGH
+      - TZ=Asia/Kathmandu
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=kP4Th5pZqRKmGH #Must match the above password
+    volumes:
+      - /docker/mysql_wp_main:/config
+    ports:
+      - 3333:3306
+    restart: unless-stopped
+volumes:
+  wordpress:
+  db:
